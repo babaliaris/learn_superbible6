@@ -1,5 +1,5 @@
 #pragma once
-#include <lessons/chapter2.h>
+#include <lessons/chapter2/chapter2.h>
 
 enum class LessonE
 {
