@@ -12,7 +12,7 @@ class Sandbox : public sb6::application
     
     void startup() override
     {
-        m_lesson = GetLesson(LessonE::CHAPTER3_INTERFACE_BLOCKS);
+        m_lesson = GetLesson(LessonE::CHAPTER3_FRAGMENT_SHADER);
 
         if (m_lesson != nullptr)
         {
