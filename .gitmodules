@@ -1,0 +1,3 @@
+[submodule "external/superbible"]
+	path = external/superbible
+	url = https://github.com/babaliaris/openGL_Superbible6_Sandbox.git
