@@ -10,14 +10,16 @@ Chapter3_PassingDataFromStageToStage::Chapter3_PassingDataFromStageToStage()
 
 void Chapter3_PassingDataFromStageToStage::render(double currentTime)
 {
-    const GLfloat red[] = 
+    const GLfloat clearColor[] = {0.0f, 0.0f, 0.0f, 1.0f};
+
+    const GLfloat animatedColor[] = 
     {
         (float)sin(currentTime) * 0.5f + 0.5f,
         (float)cos(currentTime) * 0.5f + 0.5f,
         0.0f, 1.0f
     };
 
-    const GLfloat attrib[] = 
+    const GLfloat offset[] = 
     {
         (float)sin(currentTime) * 0.5f,
         (float)cos(currentTime) * 0.6f,
@@ -25,14 +27,15 @@ void Chapter3_PassingDataFromStageToStage::render(double currentTime)
     };
 
     //Clear the color buffer.
-    glClearBufferfv(GL_COLOR, 0, red);
+    glClearBufferfv(GL_COLOR, 0, clearColor);
 
     //Use program & Bind VAO
     glUseProgram(m_program);
     glBindVertexArray(m_vao);
 
-    //Update the offset attribute in the vertex shader.
-    glVertexAttrib4fv(0, attrib);
+    
+    glVertexAttrib4fv(0, offset); //Update the offset attribute in the vertex shader.
+    glVertexAttrib4fv(1, animatedColor); //Update the color attribute in the vertex shader.
 
     //Draw Call.
     glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -59,13 +62,16 @@ static GLuint CreateProgram()
     static const GLchar *vertex_src[]=
     {
         "#version 430 core\n"
-        "layout(location=0) in vec4 m_Offset;"
+        "layout(location=0) in vec4 a_Offset;"
+        "layout(location=1) in vec4 a_Color;"
+        "out vec4 m_Color;"
         "const vec4 verts[3] = vec4[3](\
             vec4(-0.5f, -0.5f, 0.5f, 1.0f),\
             vec4(0.5f, -0.5f, 0.5f, 1.0f),\
             vec4(0.0f, 0.5f, 0.5f, 1.0f));"
         "void main(void){"
-        "gl_Position=verts[gl_VertexID] + m_Offset;"
+        "gl_Position=verts[gl_VertexID] + a_Offset;"
+        "m_Color = a_Color;"
         "}"
     };
 
@@ -73,9 +79,10 @@ static GLuint CreateProgram()
     static const GLchar *fragment_src[]=
     {
         "#version 430 core\n"
+        "in vec4 m_Color;"
         "out vec4 m_FragColor;"
         "void main(void){"
-        "m_FragColor=vec4(0.0f, 0.8f, 1.0f, 1.0f);"
+        "m_FragColor=m_Color;"
         "}"
     };
 
