@@ -4,6 +4,7 @@
 #include <lessons/chapter3/chapter3_passing_data_from_stage_to_stage.h>
 #include <lessons/chapter3/chapter3_interface_blocks.h>
 #include <lessons/chapter3/chapter3_fragment_shader.h>
+#include <lessons/chapter3/chapter3_interpolation.h>
 
 enum class LessonE
 {
@@ -11,7 +12,8 @@ enum class LessonE
     CHAPTER3_VERTEX_ATTRIB4FV,
     CHAPTER3_PASSING_DATA_FROM_STAGE_TO_STAGE,
     CHAPTER3_INTERFACE_BLOCKS,
-    CHAPTER3_FRAGMENT_SHADER
+    CHAPTER3_FRAGMENT_SHADER,
+    CHAPTER3_INTERPOLATION
 
 };
 
@@ -33,6 +35,9 @@ Lesson *GetLesson(LessonE lesson)
 
         case LessonE::CHAPTER3_FRAGMENT_SHADER:
             return new Chapter3_FragmentShader();
+
+        case LessonE::CHAPTER3_INTERPOLATION:
+            return new Chapter3_Interpolation();
         
         default:
             printf("[GetLesson()] Uknown Lesson.");
