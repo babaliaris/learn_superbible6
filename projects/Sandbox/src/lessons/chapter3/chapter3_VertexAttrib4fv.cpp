@@ -17,11 +17,24 @@ void Chapter3_VertexAttrib4fv::render(double currentTime)
         0.0f, 1.0f
     };
 
+    const GLfloat attrib[] = 
+    {
+        (float)sin(currentTime) * 0.5f,
+        (float)cos(currentTime) * 0.6f,
+        0.0f, 0.0f
+    };
+
+    //Clear the color buffer.
     glClearBufferfv(GL_COLOR, 0, red);
 
+    //Use program & Bind VAO
     glUseProgram(m_program);
     glBindVertexArray(m_vao);
 
+    //Update the offset attribute in the vertex shader.
+    glVertexAttrib4fv(0, attrib);
+
+    //Draw Call.
     glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 
@@ -46,12 +59,13 @@ GLuint CreateProgram()
     static const GLchar *vertex_src[]=
     {
         "#version 430 core\n"
+        "layout(location=0) in vec4 m_Offset;"
         "const vec4 verts[3] = vec4[3](\
             vec4(-0.5f, -0.5f, 0.5f, 1.0f),\
             vec4(0.5f, -0.5f, 0.5f, 1.0f),\
             vec4(0.0f, 0.5f, 0.5f, 1.0f));"
         "void main(void){"
-        "gl_Position=verts[gl_VertexID];"
+        "gl_Position=verts[gl_VertexID] + m_Offset;"
         "}"
     };
 
