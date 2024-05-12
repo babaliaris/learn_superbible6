@@ -1,10 +1,19 @@
 #include <sb6.h>
 #include <vmath.h>
 
-GLuint CreateProgram(void);
+enum class RenderOptionE
+{
+    POINT,
+    TRIANGLE
+};
+
+GLuint CreateProgram(RenderOptionE renderOption);
+
+
 
 class Sandbox : public sb6::application
 {
+    public:
     void render(double currentTime) override
     {
         const GLfloat red[] = 
@@ -18,13 +27,23 @@ class Sandbox : public sb6::application
 
         glUseProgram(m_program);
         glBindVertexArray(m_vao);
-        glDrawArrays(GL_POINTS, 0, 1);
+
+        if (m_option == RenderOptionE::POINT)
+        {
+            glDrawArrays(GL_POINTS, 0, 1);
+        }
+
+        else
+        {
+            glDrawArrays(GL_TRIANGLES, 0, 3);
+        }
     }
     
     void startup() override
     {
+        m_option =  RenderOptionE::TRIANGLE;
         glPointSize(40.0f);
-        m_program = CreateProgram();
+        m_program = CreateProgram(m_option);
         glGenVertexArrays(1, &m_vao);
     }
 
@@ -36,21 +55,42 @@ class Sandbox : public sb6::application
 
     private:
     GLuint m_program, m_vao;
+    RenderOptionE m_option;
 };
 
 
 DECLARE_MAIN(Sandbox);
 
 
-GLuint CreateProgram(void)
+GLuint CreateProgram(RenderOptionE renderOption)
 {
-    static const GLchar *vertex_src[]=
+    const char *v_str;
+
+    if (renderOption == RenderOptionE::POINT)
     {
-        "#version 430 core\n"
+        v_str = "#version 430 core\n"
         "void main(void){"
         "gl_Position=vec4(0.0f, 0.0f, 0.5f, 1.0f);"
-        "}"
+        "}";
+    }
+
+    else 
+    {
+        v_str = "#version 430 core\n"
+        "const vec4 verts[3] = vec4[3](\
+            vec4(-0.5f, -0.5f, 0.5f, 1.0f),\
+            vec4(0.5f, -0.5f, 0.5f, 1.0f),\
+            vec4(0.0f, 0.5f, 0.5f, 1.0f));"
+        "void main(void){"
+        "gl_Position=verts[gl_VertexID];"
+        "}";
+    }
+
+    static const GLchar *vertex_src[]=
+    {
+        v_str
     };
+
 
     static const GLchar *fragment_src[]=
     {
