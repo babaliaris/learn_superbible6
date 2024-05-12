@@ -1,6 +1,7 @@
 #include "lesson.h"
 
-Lesson::Lesson()
+Lesson::Lesson(const char *name)
+:m_name(name)
 {
 }
 

@@ -2,18 +2,12 @@
 #include <sb6.h>
 #include <core/lesson.h>
 
-enum class RenderOptionE
-{
-    POINT,
-    TRIANGLE
-};
-
-class Chapter2 : public Lesson
+class Chapter3_VertexAttrib4fv : public Lesson
 {
     public:
-    Chapter2();
-
-    virtual ~Chapter2() = default;
+    Chapter3_VertexAttrib4fv();
+    
+    virtual ~Chapter3_VertexAttrib4fv() = default;
     
     void render(double currentTime) override;
     
@@ -23,5 +17,4 @@ class Chapter2 : public Lesson
 
     private:
     GLuint m_program, m_vao;
-    RenderOptionE m_option;
 };

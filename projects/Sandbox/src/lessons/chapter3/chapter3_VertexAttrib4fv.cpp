@@ -1,16 +1,14 @@
-#include "chapter2.h"
+#include "chapter3_VertexAttrib4fv.h"
 #include <vmath.h>
 
-GLuint CreateProgram(RenderOptionE renderOption);
+GLuint CreateProgram();
 
-
-Chapter2::Chapter2()
-: Lesson("Chapter2")
+Chapter3_VertexAttrib4fv::Chapter3_VertexAttrib4fv()
+:Lesson("Chapter3_VertexAttrib4fv")
 {
 }
 
-
-void Chapter2::render(double currentTime)
+void Chapter3_VertexAttrib4fv::render(double currentTime)
 {
     const GLfloat red[] = 
     {
@@ -24,61 +22,37 @@ void Chapter2::render(double currentTime)
     glUseProgram(m_program);
     glBindVertexArray(m_vao);
 
-    if (m_option == RenderOptionE::POINT)
-    {
-        glDrawArrays(GL_POINTS, 0, 1);
-    }
-
-    else
-    {
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-    }
+    glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 
 
-void Chapter2::startup()
+void Chapter3_VertexAttrib4fv::startup()
 {
-    m_option =  RenderOptionE::TRIANGLE;
     glPointSize(40.0f);
-    m_program = CreateProgram(m_option);
+    m_program = CreateProgram();
     glGenVertexArrays(1, &m_vao);
 }
 
 
-void Chapter2::shutdown()
+void Chapter3_VertexAttrib4fv::shutdown()
 {
     glDeleteProgram(m_program);
     glDeleteVertexArrays(1, &m_vao);
 }
 
 
-GLuint CreateProgram(RenderOptionE renderOption)
+GLuint CreateProgram()
 {
-    const char *v_str;
-
-    if (renderOption == RenderOptionE::POINT)
+    static const GLchar *vertex_src[]=
     {
-        v_str = "#version 430 core\n"
-        "void main(void){"
-        "gl_Position=vec4(0.0f, 0.0f, 0.5f, 1.0f);"
-        "}";
-    }
-
-    else 
-    {
-        v_str = "#version 430 core\n"
+        "#version 430 core\n"
         "const vec4 verts[3] = vec4[3](\
             vec4(-0.5f, -0.5f, 0.5f, 1.0f),\
             vec4(0.5f, -0.5f, 0.5f, 1.0f),\
             vec4(0.0f, 0.5f, 0.5f, 1.0f));"
         "void main(void){"
         "gl_Position=verts[gl_VertexID];"
-        "}";
-    }
-
-    static const GLchar *vertex_src[]=
-    {
-        v_str
+        "}"
     };
 
 

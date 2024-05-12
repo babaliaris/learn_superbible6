@@ -12,9 +12,13 @@ class Sandbox : public sb6::application
     
     void startup() override
     {
-        m_lesson = GetLesson(LessonE::CHAPTER2);
+        m_lesson = GetLesson(LessonE::CHAPTER3_VERTEX_ATTRIB4FV);
 
-        if (m_lesson != nullptr) m_lesson->startup();
+        if (m_lesson != nullptr)
+        {
+            printf("Loading Lesson: \"%s\"\n", m_lesson->getName());
+            m_lesson->startup();
+        }
     }
 
     void shutdown() override

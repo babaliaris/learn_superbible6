@@ -3,7 +3,7 @@
 class Lesson
 {
     public:
-    Lesson();
+    Lesson(const char *name);
     virtual ~Lesson();
 
     virtual void render(double currentTime);
@@ -12,5 +12,8 @@ class Lesson
 
     virtual void shutdown();
 
+    inline const char *getName() const {return m_name;}
+
     private:
+    const char *m_name;
 };
