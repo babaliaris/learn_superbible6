@@ -12,30 +12,12 @@ void Chapter3_FragmentShader::render(double currentTime)
 {
     const GLfloat clearColor[] = {0.0f, 0.0f, 0.0f, 1.0f};
 
-    const GLfloat animatedColor[] = 
-    {
-        (float)sin(currentTime) * 0.5f + 0.5f,
-        (float)cos(currentTime) * 0.5f + 0.5f,
-        0.0f, 1.0f
-    };
-
-    const GLfloat offset[] = 
-    {
-        (float)sin(currentTime) * 0.5f,
-        (float)cos(currentTime) * 0.6f,
-        0.0f, 0.0f
-    };
-
     //Clear the color buffer.
     glClearBufferfv(GL_COLOR, 0, clearColor);
 
     //Use program & Bind VAO
     glUseProgram(m_program);
     glBindVertexArray(m_vao);
-
-    
-    glVertexAttrib4fv(0, offset); //Update the offset attribute in the vertex shader.
-    glVertexAttrib4fv(1, animatedColor); //Update the color attribute in the vertex shader.
 
     //Draw Call.
     glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -44,7 +26,6 @@ void Chapter3_FragmentShader::render(double currentTime)
 
 void Chapter3_FragmentShader::startup()
 {
-    glPointSize(40.0f);
     m_program = CreateProgram();
     glGenVertexArrays(1, &m_vao);
 }
