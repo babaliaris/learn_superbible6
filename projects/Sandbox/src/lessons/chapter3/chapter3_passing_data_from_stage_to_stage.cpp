@@ -1,16 +1,14 @@
-#include "chapter2.h"
+#include "chapter3_passing_data_from_stage_to_stage.h"
 #include <vmath.h>
 
-static GLuint CreateProgram(RenderOptionE renderOption);
+static GLuint CreateProgram();
 
-
-Chapter2::Chapter2()
-: Lesson("Chapter2")
+Chapter3_PassingDataFromStageToStage::Chapter3_PassingDataFromStageToStage()
+:Lesson("Chapter3_PassingDataFromStageToStage")
 {
 }
 
-
-void Chapter2::render(double currentTime)
+void Chapter3_PassingDataFromStageToStage::render(double currentTime)
 {
     const GLfloat red[] = 
     {
@@ -19,66 +17,56 @@ void Chapter2::render(double currentTime)
         0.0f, 1.0f
     };
 
+    const GLfloat attrib[] = 
+    {
+        (float)sin(currentTime) * 0.5f,
+        (float)cos(currentTime) * 0.6f,
+        0.0f, 0.0f
+    };
+
+    //Clear the color buffer.
     glClearBufferfv(GL_COLOR, 0, red);
 
+    //Use program & Bind VAO
     glUseProgram(m_program);
     glBindVertexArray(m_vao);
 
-    if (m_option == RenderOptionE::POINT)
-    {
-        glDrawArrays(GL_POINTS, 0, 1);
-    }
+    //Update the offset attribute in the vertex shader.
+    glVertexAttrib4fv(0, attrib);
 
-    else
-    {
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-    }
+    //Draw Call.
+    glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 
 
-void Chapter2::startup()
+void Chapter3_PassingDataFromStageToStage::startup()
 {
-    m_option =  RenderOptionE::TRIANGLE;
     glPointSize(40.0f);
-    m_program = CreateProgram(m_option);
+    m_program = CreateProgram();
     glGenVertexArrays(1, &m_vao);
 }
 
 
-void Chapter2::shutdown()
+void Chapter3_PassingDataFromStageToStage::shutdown()
 {
     glDeleteProgram(m_program);
     glDeleteVertexArrays(1, &m_vao);
 }
 
 
-static GLuint CreateProgram(RenderOptionE renderOption)
+static GLuint CreateProgram()
 {
-    const char *v_str;
-
-    if (renderOption == RenderOptionE::POINT)
+    static const GLchar *vertex_src[]=
     {
-        v_str = "#version 430 core\n"
-        "void main(void){"
-        "gl_Position=vec4(0.0f, 0.0f, 0.5f, 1.0f);"
-        "}";
-    }
-
-    else 
-    {
-        v_str = "#version 430 core\n"
+        "#version 430 core\n"
+        "layout(location=0) in vec4 m_Offset;"
         "const vec4 verts[3] = vec4[3](\
             vec4(-0.5f, -0.5f, 0.5f, 1.0f),\
             vec4(0.5f, -0.5f, 0.5f, 1.0f),\
             vec4(0.0f, 0.5f, 0.5f, 1.0f));"
         "void main(void){"
-        "gl_Position=verts[gl_VertexID];"
-        "}";
-    }
-
-    static const GLchar *vertex_src[]=
-    {
-        v_str
+        "gl_Position=verts[gl_VertexID] + m_Offset;"
+        "}"
     };
 
 

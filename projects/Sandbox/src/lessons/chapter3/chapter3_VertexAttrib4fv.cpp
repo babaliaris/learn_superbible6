@@ -1,7 +1,7 @@
 #include "chapter3_VertexAttrib4fv.h"
 #include <vmath.h>
 
-GLuint CreateProgram();
+static GLuint CreateProgram();
 
 Chapter3_VertexAttrib4fv::Chapter3_VertexAttrib4fv()
 :Lesson("Chapter3_VertexAttrib4fv")
@@ -54,7 +54,7 @@ void Chapter3_VertexAttrib4fv::shutdown()
 }
 
 
-GLuint CreateProgram()
+static GLuint CreateProgram()
 {
     static const GLchar *vertex_src[]=
     {
