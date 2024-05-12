@@ -12,7 +12,7 @@ class Sandbox : public sb6::application
     
     void startup() override
     {
-        m_lesson = GetLesson(LessonE::CHAPTER3_PASSING_DATA_FROM_STAGE_TO_STAGE);
+        m_lesson = GetLesson(LessonE::CHAPTER3_INTERFACE_BLOCKS);
 
         if (m_lesson != nullptr)
         {
